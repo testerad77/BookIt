@@ -4,6 +4,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ Dynamically loads test data to veriables according to the env value.
+ First - checks if "env" value was passed from command line.
+    If YES, it will use that value
+    If NO, it will use the value in local configurations.properties file
+ */
+
 public class Environment {
 
         public static final String URL;
@@ -18,14 +25,17 @@ public class Environment {
         public static final String LEADER_EMAIL;
         public static final String LEADER_PASSWORD;
 
-        static {
+        static { //runs once in the beginning when we use the class - static block
 
+            //properties - class to read from properties files
             Properties properties = null;
-            String environment = System.getProperty("environment") != null ? environment = System.getProperty("environment") : ConfigurationReader.getProperty("environment");
+
+            //System.getProperty("env") => current env info
+            String environment = System.getProperty("env") != null ? System.getProperty("env") : ConfigurationReader.getProperty("env");
             //String environment = ConfigurationReader.get("environment");
 
             try {
-
+                //                                      path of project                / pick from line 34
                 String path = System.getProperty("user.dir") + "/src/test/resources/env/" + environment + ".properties";
 
                 FileInputStream input = new FileInputStream(path);
